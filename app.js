@@ -19,6 +19,10 @@ app.listen(port,function(){
    console.log(`server listening on port ${port}`); 
 });
 
+app.get('/', (req,res)=>{
+  res.json('api is healthy')
+})
+
 mongoose.connect(db_link)
   .then(function (db) {
     console.log("MongoDB connected successfully");
