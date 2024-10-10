@@ -1,27 +1,14 @@
 const express = require('express');
-// const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const {getUser,updateUser,deleteUser,getAllUser,updateProfileImage} = require('../controller/userController');
-const {signup,login,isAuthorised,protectRoute,forgetpassword,resetpassword,logout} = require('../controller/authController');
+const {isAuthorised,forgetpassword,resetpassword,logout} = require('../controller/authController');
 const userRouter = express.Router();
 
-
-// user's options 
 userRouter
-    .route('/:id')
-    .get(getUser)
-    .patch(updateUser)
-    .delete(deleteUser)
+    .route('/logout')
+    .get(logout)
 
 userRouter
-    .route('/signup')
-    .post(signup)
-
-userRouter
-    .route('/login')
-    .post(login)
-
-    userRouter
     .route('/forgetpassword')
     .post(forgetpassword)
 
@@ -30,14 +17,15 @@ userRouter
     .post(resetpassword)
 
 userRouter
-    .route('/logout')
-    .get(logout)
+    .route('/:id')
+    .get(getUser)
+    .patch(updateUser)
+    .delete(deleteUser)
 
 userRouter.get('/ProfileImage',(req,res)=>{
     res.sendFile("C:/Users/david/Desktop/backend/signup/multer.html");
 });
 
-// userRouter.use(protectRoute);
 userRouter
     .route('/userProfile')
     .get(getUser)

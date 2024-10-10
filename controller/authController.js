@@ -1,22 +1,17 @@
-const express = require('express');
 const userModel = require('../models/userModel');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const jwt = require('jsonWebToken');
+const bcrypt = require("bcrypt");
 const {sendMail} = require('../utility/nodemailer')
 
 // signup function
 module.exports.signup = async function signup(req, res){
     try{
-        const { name, email, password, confirmPassword, role, profileImage} = req.body;
-        if (password != confirmPassword) {
-            return res.status(400).json({ message: "Password and confirmPassword do not match" });
-        }        
+        const { name, email, password} = req.body;       
 
         const encryptedPassword = await bcrypt.hash(password, 10);
-        const user = await userModel.create({ name, email, password: encryptedPassword, role, profileImage })
-        // sendMail('signup', user);
+        const user = await userModel.create({ name, email, password: encryptedPassword })
         if(user){
-            return res.json({
+            return res.status(201).json({
                 message : "user signed up",
                 data : user
             })
@@ -43,8 +38,8 @@ module.exports.login = async function login(req, res){
             if(user){
                 const doesPasswordMatch = await bcrypt.compare(data.password, user.password)
                 if(doesPasswordMatch){
-                    const token = jwt.sign({userId : user['_id']}, process.env.JWT_PRIVATE_KEY, { expiresIn: '7d' })
-                    // res.cookie("token",token, {httpOnly:true});
+                    const token = jwt.sign({userId : user._id}, process.env.JWT_PRIVATE_KEY, { expiresIn: '7d' })
+                    res.cookie("login",token, {httpOnly:true});
                     return res.status(201)
                     .json({
                         message:"logged in successfully",
@@ -80,7 +75,7 @@ module.exports.login = async function login(req, res){
 
 // isAuthorised -> to check roles
 module.exports.isAuthorised = function isAuthorised(roles) { 
-    return async function(req, res, next) { // Return a function that accepts req, res, next
+    return async function(req, res, next) { 
         const token = req.headers.token;
         if (token) {
             const decoded = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
@@ -93,7 +88,7 @@ module.exports.isAuthorised = function isAuthorised(roles) {
             req.role = user.role;
             req.userId = user._id;
             console.log(req.role);
-            if (roles.includes(req.role)) { // Check if user's role is in the array of roles
+            if (roles.includes(req.role)) { 
                 next();
             } else {
                 res.status(401).json({
@@ -211,13 +206,12 @@ module.exports.resetpassword = async function resetpassword(req, res) {
 };
 
 // logout user
-module.exports.logout = function logout(req,res){
-    res.clearCookie('login');
-    // res.cookie('login', ' ', {maxAge:0});
-    // res.redirect('/login')
-    res.json({
-        message : 'user logged out Succesfully'
-    })
-}
+module.exports.logout = function logout(req, res) {
+    res.clearCookie('login', { httpOnly: true, path: '/' }); // Ensure path matches the original cookie
+    res.status(200).json({
+        message: 'User logged out successfully'
+    });
+
+};
   
   

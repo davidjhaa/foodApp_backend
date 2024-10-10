@@ -98,17 +98,3 @@ module.exports.updateProfileImage=function updateProfileImage(req,res){
       message:'file uploaded succesfully'
     });
 }
-
-//  use 0f cookies npm =>cookie-parser
-// function setCookies(req,res){
-//     res.setHeader('Set-Cookie', 'isLoggedIn=true');
-//     res.cookie('isLoggedIn',true,{maxAge:1000*60*60*24, secure:true, httpOnly:true});
-//     res.cookie('isPrimeMember',true);
-//     res.send('cookie has been set');
-// }
-
-// function getCookies(req,res){
-//     let cookie = req.cookies;
-//     console.log(cookie);
-//     res.send('cookies recieved');
-// }
