@@ -39,7 +39,7 @@ module.exports.login = async function login(req, res){
                 const doesPasswordMatch = await bcrypt.compare(password, user.password)
                 if(doesPasswordMatch){
                     const token = jwt.sign({userId : user._id}, process.env.JWT_PRIVATE_KEY, { expiresIn: '7d' })
-                    res.cookie("login",token, {httpOnly:true});
+                    res.cookie("login", token, { httpOnly: true, secure: true });
                     return res.status(201)
                     .json({
                         message:"logged in successfully",

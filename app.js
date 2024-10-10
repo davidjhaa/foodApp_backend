@@ -10,10 +10,7 @@ const db_link = process.env.db_link;
 const app = express();
 
 
-app.use(cors({
-    origin: process.env.frontendOrigin,  
-    credentials: true,  
-}));
+app.use(cors({credentials: true}));
 app.use(express.json());
 app.use(cookieParser());
 
