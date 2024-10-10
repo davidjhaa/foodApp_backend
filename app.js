@@ -2,6 +2,11 @@ const express = require('express');
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
 const mongoose = require('mongoose');
+const userRouter = require('./Routers/userRouter');
+const authRouter = require('./Routers/authRouter');
+const planRouter = require('./Routers/planRouter');
+const reviewRouter = require('./Routers/reviewRouter');
+const bookingRouter = require('./Routers/bookingRouter');
 
 require('dotenv').config()
 
@@ -10,9 +15,13 @@ const db_link = process.env.db_link;
 const app = express();
 
 
-app.use(cors({credentials: true}));
+app.use(cors({
+    origin: process.env.frontendOrigin,  
+    credentials: true,  
+}));
 app.use(express.json());
 app.use(cookieParser());
+
 
 const port = process.env.PORT || 3001;
 
@@ -31,13 +40,6 @@ mongoose.connect(db_link)
   .catch(function (err) {
     console.log("Error connecting to MongoDB:", err);
   });
-
-const userRouter = require('./Routers/userRouter');
-const authRouter = require('./Routers/authRouter');
-const planRouter = require('./Routers/planRouter');
-const reviewRouter = require('./Routers/reviewRouter');
-const bookingRouter = require('./Routers/bookingRouter');
-
 
    // base route   route to use
 app.use('/user', userRouter);
