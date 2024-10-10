@@ -9,11 +9,10 @@ const db_link = process.env.db_link;
 
 const app = express();
 
-const frontendOrigin = 'http://localhost:3000'; 
 
 app.use(cors({
-    origin: frontendOrigin,  // Allow the frontend domain
-    credentials: true,  // Allow cookies and credentials
+    origin: process.env.frontendOrigin,  
+    credentials: true,  
 }));
 app.use(express.json());
 app.use(cookieParser());
