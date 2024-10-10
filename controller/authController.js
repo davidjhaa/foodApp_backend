@@ -1,5 +1,5 @@
 const userModel = require('../models/userModel');
-const jwt = require('jsonWebToken');
+const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
 const {sendMail} = require('../utility/nodemailer')
 
@@ -32,11 +32,11 @@ module.exports.signup = async function signup(req, res){
 // login check function
 module.exports.login = async function login(req, res){
     try{
-        let data = req.body;
-        if(data.email){
-            let user = await userModel.findOne({ email : data.email });
+        const {email, password} = req.body;
+        if(email){
+            let user = await userModel.findOne({ email });
             if(user){
-                const doesPasswordMatch = await bcrypt.compare(data.password, user.password)
+                const doesPasswordMatch = await bcrypt.compare(password, user.password)
                 if(doesPasswordMatch){
                     const token = jwt.sign({userId : user._id}, process.env.JWT_PRIVATE_KEY, { expiresIn: '7d' })
                     res.cookie("login",token, {httpOnly:true});
@@ -67,6 +67,7 @@ module.exports.login = async function login(req, res){
         }
     } 
     catch(err){
+        console.log("cccccccccc")
         return res.status(401).json({
             message:err.mesage,
         });
