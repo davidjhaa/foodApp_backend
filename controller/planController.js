@@ -2,8 +2,8 @@ const planModel = require("../models/planModel");
 
 module.exports.getAllPlans = async function getAllPlans(req, res) {
   try {
-    let response = await planModel.find();
-    if (response) {
+    let plans = await planModel.find();
+    if (plans) {
       return res.json({
         message: "all plans retrieved",
         plans: plans,

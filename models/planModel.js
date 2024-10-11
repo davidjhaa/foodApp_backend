@@ -27,9 +27,6 @@ const planSchema = new mongoose.Schema({
       "dicount should not exceed price",
     ],
   },
-  refUserId: {
-    type: mongoose.ObjectId,
-  },
 });
 
 // model

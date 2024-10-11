@@ -26,14 +26,6 @@ const reviewSchema=new mongoose.Schema({
         required:[true,'review must belong to a plan']
     }
 });
-//find findById, findOne
-reviewSchema.pre(/^find/, function (next) {
-    this.populate({
-      path: "user",
-      select: "name profileImage"
-    }).populate("plan");
-    next();
-  });
 
 const reviewModel=mongoose.model('reviewModel',reviewSchema);
 
